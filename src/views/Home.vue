@@ -1,20 +1,25 @@
 <template>
-  <div class="home">
-    <div>
-      <span>名称: </span>
-      <el-input title="name" placeholder="请输入名称" v-model="name"></el-input>
-    </div>
-    <div>
-      <span>里程: </span>
-      <el-input title="distance" placeholder="请输入里程" v-model="distance"></el-input>
-    </div>
-    <el-button type="primary" @click="confirm">确认</el-button>
+    <div class="home">
+        <el-form :inline="true" :model="form" :rules="rules">
+            <el-form-item label="姓名" prop="name">
+                <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
+            </el-form-item>
+            <el-form-item label="里程" prop="distance">
+                <el-input v-model.number="form.distance" placeholder="请输入里程">
+                    <template slot="append">米</template>
+                </el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="confirm">确认</el-button>
+            </el-form-item>
+        </el-form>
 
-    <div v-for="item in list" :key="item.name">
-      <span>{{item.name}}</span>
-      <span>{{item.distance}}</span>
+        <el-table :data="list" stripe style="width: 540px">
+            <el-table-column prop="date" label="日期" width="180"></el-table-column>
+            <el-table-column prop="name" label="名称" width="180"></el-table-column>
+            <el-table-column prop="distance" label="里程" width="180"></el-table-column>
+        </el-table>
     </div>
-  </div>
 </template>
 
 <script>
@@ -22,18 +27,28 @@
     name: 'home',
     data() {
       return {
-        name: '',
-        distance: '',
+        form: {
+          name: '',
+          distance: '',
+          date: '2018-08-30',
+        },
         list: [],
+        rules: {
+          name: [
+            { required: true, message: '请输入姓名', trigger: 'blur' },
+          ],
+          distance: [
+            { required: true, message: '请输入里程', trigger: 'blur' },
+            {
+ type: 'number', required: true, message: '请输入数字', trigger: 'change',
+},
+          ],
+        },
       }
     },
     methods: {
       confirm() {
-        this.list.push({
-          name: this.name,
-          distance: this.distance,
-        })
-        this.clear()
+        this.list.push(this.form)
       },
       clear() {
         this.name = ''
@@ -42,3 +57,8 @@
     },
   };
 </script>
+<style scoped>
+    .inputClass {
+        width: 200px;
+    }
+</style>
