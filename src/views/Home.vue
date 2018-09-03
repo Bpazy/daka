@@ -65,11 +65,9 @@ export default {
     this.load()
   },
   methods: {
-    confirm() {
-      this.formList.push({
-        ...this.form,
-      });
-      this.$http.post('/save', { ...this.form });
+    async confirm() {
+      this.$http.post('/save', { ...this.form })
+      this.load()
     },
     handleSizeChange(size) {
       this.pageSize = size
