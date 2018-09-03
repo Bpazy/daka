@@ -14,7 +14,7 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="formList" stripe style="width: 540px">
+    <el-table :data="formListDisplay" stripe style="width: 540px">
       <el-table-column prop="date" label="日期" width="180"></el-table-column>
       <el-table-column prop="name" label="名称" width="180"></el-table-column>
       <el-table-column prop="distance" label="里程" width="180"></el-table-column>
@@ -33,6 +33,7 @@ export default {
         date: '2018-08-30',
       },
       formList: [],
+      formListDisplay: [],
       rules: {
         name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         distance: [
@@ -45,17 +46,25 @@ export default {
           },
         ],
       },
-    };
+    }
+  },
+  async created() {
+    this.formList = (await this.$http.get('/list')).data
   },
   methods: {
     confirm() {
       this.formList.push({
         ...this.form,
-        distance: `${this.form.distance}米`,
-      });
+      })
+      this.$http.post('/save', { ...this.form })
     },
   },
-};
+  watch: {
+    formList(newFormList) {
+      this.formListDisplay = newFormList.map(form => ({ ...form, distance: `${form.distance}米` }))
+    },
+  },
+}
 </script>
 <style scoped>
 </style>
