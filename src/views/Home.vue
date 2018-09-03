@@ -19,6 +19,16 @@
       <el-table-column prop="name" label="名称" width="180"></el-table-column>
       <el-table-column prop="distance" label="里程" width="180"></el-table-column>
     </el-table>
+
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
   </div>
 </template>
 
@@ -27,6 +37,9 @@ export default {
   name: 'home',
   data() {
     return {
+      currentPage: 1,
+      pageSize: 10,
+      total: 0,
       form: {
         name: '',
         distance: '',
@@ -46,25 +59,44 @@ export default {
           },
         ],
       },
-    }
+    };
   },
   async created() {
-    this.formList = (await this.$http.get('/list')).data
+    this.load()
   },
   methods: {
     confirm() {
       this.formList.push({
         ...this.form,
-      })
-      this.$http.post('/save', { ...this.form })
+      });
+      this.$http.post('/save', { ...this.form });
+    },
+    handleSizeChange(size) {
+      this.pageSize = size
+      this.load()
+    },
+    async handleCurrentChange(currentPage) {
+      this.currentPage = currentPage
+      this.load()
+    },
+    async load() {
+      const pagination = (await this.$http.post('/list', {
+        size: this.pageSize,
+        start: (this.currentPage - 1) * this.pageSize,
+      })).data;
+      this.formList = pagination.data;
+      this.total = pagination.total;
     },
   },
   watch: {
     formList(newFormList) {
-      this.formListDisplay = newFormList.map(form => ({ ...form, distance: `${form.distance}米` }))
+      this.formListDisplay = newFormList.map(form => ({
+        ...form,
+        distance: `${form.distance}米`,
+      }));
     },
   },
-}
+};
 </script>
 <style scoped>
 </style>
