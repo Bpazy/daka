@@ -1,10 +1,19 @@
 <template>
     <el-form :model="loginForm" label-width="90px" :rules="rules" ref="loginForm">
         <el-form-item label="用户名" prop="username">
-            <el-input v-model="loginForm.username" auto-complete="off"></el-input>
+            <el-input
+              v-model="loginForm.username"
+              auto-complete="off"
+              style="width: 200px;">
+            </el-input>
         </el-form-item>
         <el-form-item label="密码" prop="pass">
-            <el-input type="password" v-model="loginForm.pass" auto-complete="off"></el-input>
+            <el-input
+              type="password"
+              v-model="loginForm.pass"
+              auto-complete="off"
+              style="width: 200px;">
+            </el-input>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
@@ -17,12 +26,12 @@ export default {
   data() {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入密码'));
+        callback(new Error('请输入密码'))
       } else {
         if (this.loginForm.checkPass !== '') {
-          this.$refs.loginForm.validateField('checkPass');
+          this.$refs.loginForm.validateField('checkPass')
         }
-        callback();
+        callback()
       }
     }
     return {
@@ -46,20 +55,30 @@ export default {
           { validator: validatePass, trigger: 'blur' },
         ],
       },
-    };
+    }
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      const self = this
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          this.$http.post('/login', {
+          const { code, msg } = (await this.$http.post('/login', {
             username: this.loginForm.username,
             password: this.loginForm.pass,
-          });
+          })).data
+          if (code === 'OK') {
+            return this.$message({
+              message: msg,
+              onClose() {
+                self.$router.push('/')
+              },
+            })
+          }
+          return this.$message.error(msg)
         }
-        return false;
-      });
+        return false
+      })
     },
   },
-};
+}
 </script>

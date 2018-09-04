@@ -21,23 +21,23 @@ export default {
   data() {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入密码'));
+        callback(new Error('请输入密码'))
       } else {
         if (this.registerForm.checkPass !== '') {
-          this.$refs.registerForm.validateField('checkPass');
+          this.$refs.registerForm.validateField('checkPass')
         }
-        callback();
+        callback()
       }
-    };
+    }
     const validatePass2 = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请再次输入密码'));
+        callback(new Error('请再次输入密码'))
       } else if (value !== this.registerForm.pass) {
-        callback(new Error('两次输入密码不一致!'));
+        callback(new Error('两次输入密码不一致!'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       registerForm: {
         username: '',
@@ -63,7 +63,7 @@ export default {
           { validator: validatePass2, trigger: 'blur' },
         ],
       },
-    };
+    }
   },
   methods: {
     submitForm(formName) {
@@ -74,16 +74,21 @@ export default {
             password: this.registerForm.pass,
           })).data
           if (code !== 'OK') {
-            this.$dialog.open(msg)
+            this.$message.error(msg)
+            return true
+          }
+          if (code === 'OK') {
+            this.$message(msg)
+            this.$router.push('/login')
             return true
           }
         }
-        return false;
-      });
+        return false
+      })
     },
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields()
     },
   },
-};
+}
 </script>

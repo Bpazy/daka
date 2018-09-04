@@ -14,7 +14,7 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="formListDisplay" stripe style="width: 540px">
+    <el-table :data="formListDisplay" stripe style="width: 540px" v-loading="loading">
       <el-table-column prop="date" label="日期" width="180"></el-table-column>
       <el-table-column prop="name" label="名称" width="180"></el-table-column>
       <el-table-column prop="distance" label="里程" width="180"></el-table-column>
@@ -29,8 +29,6 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
     </el-pagination>
-
-    <el-button type="primary" @click="dialog">Dialog</el-button>
   </div>
 </template>
 
@@ -39,6 +37,7 @@ export default {
   name: 'home',
   data() {
     return {
+      loading: false,
       currentPage: 1,
       pageSize: 10,
       total: 0,
@@ -61,34 +60,33 @@ export default {
           },
         ],
       },
-    };
+    }
   },
   async created() {
-    this.load();
+    this.load()
   },
   methods: {
-    dialog() {
-      this.$dialog.open('123');
-    },
     async confirm() {
-      this.$http.post('/save', { ...this.form });
-      this.load();
+      await this.$http.post('/save', { ...this.form })
+      this.load()
     },
     handleSizeChange(size) {
-      this.pageSize = size;
-      this.load();
+      this.pageSize = size
+      this.load()
     },
     async handleCurrentChange(currentPage) {
-      this.currentPage = currentPage;
-      this.load();
+      this.currentPage = currentPage
+      this.load()
     },
     async load() {
+      this.loading = true
       const pagination = (await this.$http.post('/list', {
         size: this.pageSize,
         start: (this.currentPage - 1) * this.pageSize,
-      })).data;
-      this.formList = pagination.data;
-      this.total = pagination.total;
+      })).data
+      this.formList = pagination.data
+      this.total = pagination.total
+      this.loading = false
     },
   },
   watch: {
@@ -96,10 +94,10 @@ export default {
       this.formListDisplay = newFormList.map(form => ({
         ...form,
         distance: `${form.distance}米`,
-      }));
+      }))
     },
   },
-};
+}
 </script>
 <style scoped>
 </style>
