@@ -29,6 +29,8 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
     </el-pagination>
+
+    <el-button type="primary" @click="dialog">Dialog</el-button>
   </div>
 </template>
 
@@ -62,20 +64,23 @@ export default {
     };
   },
   async created() {
-    this.load()
+    this.load();
   },
   methods: {
+    dialog() {
+      this.$dialog.open('123');
+    },
     async confirm() {
-      this.$http.post('/save', { ...this.form })
-      this.load()
+      this.$http.post('/save', { ...this.form });
+      this.load();
     },
     handleSizeChange(size) {
-      this.pageSize = size
-      this.load()
+      this.pageSize = size;
+      this.load();
     },
     async handleCurrentChange(currentPage) {
-      this.currentPage = currentPage
-      this.load()
+      this.currentPage = currentPage;
+      this.load();
     },
     async load() {
       const pagination = (await this.$http.post('/list', {
