@@ -14,10 +14,10 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="formListDisplay" stripe style="width: 540px" v-loading="loading">
-      <el-table-column prop="date" label="日期" width="180"></el-table-column>
-      <el-table-column prop="name" label="名称" width="180"></el-table-column>
-      <el-table-column prop="distance" label="里程" width="180"></el-table-column>
+    <el-table :data="formListDisplay" stripe style="width: 540px; display: inline-block;" v-loading="loading">
+      <el-table-column prop="date" label="日期" width="180" align="center"></el-table-column>
+      <el-table-column prop="name" label="名称" width="180" align="center"></el-table-column>
+      <el-table-column prop="distance" label="里程" width="180" align="center"></el-table-column>
     </el-table>
 
     <el-pagination
@@ -27,12 +27,15 @@
       :page-sizes="[10, 20, 30, 40]"
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="total">
+      :total="total"
+      style="text-align: center; margin-top: 20px;">
     </el-pagination>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'home',
   data() {
@@ -67,7 +70,10 @@ export default {
   },
   methods: {
     async confirm() {
-      await this.$http.post('/save', { ...this.form })
+      await this.$http.post('/save', {
+        ...this.form,
+        date: moment().format('YYYY-MM-DD'),
+      })
       this.load()
     },
     handleSizeChange(size) {
@@ -100,4 +106,7 @@ export default {
 }
 </script>
 <style scoped>
+.home {
+  text-align: center
+}
 </style>
