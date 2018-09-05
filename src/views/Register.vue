@@ -1,13 +1,13 @@
 <template>
     <el-form :model="registerForm" label-width="90px" :rules="rules" ref="registerForm">
         <el-form-item label="用户名" prop="username">
-            <el-input v-model="registerForm.username"></el-input>
+            <el-input v-model="registerForm.username" style="width: 200px;"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="pass">
-            <el-input type="password" v-model="registerForm.pass"></el-input>
+            <el-input type="password" v-model="registerForm.pass" style="width: 200px;"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPass">
-            <el-input type="password" v-model="registerForm.checkPass"></el-input>
+            <el-input type="password" v-model="registerForm.checkPass" style="width: 200px;"></el-input>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm('registerForm')">提交</el-button>
@@ -78,7 +78,7 @@ export default {
             return true
           }
           if (code === 'OK') {
-            this.$message(msg)
+            this.$message({ message: msg, type: 'success' })
             this.$router.push('/login')
             return true
           }

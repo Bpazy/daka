@@ -16,6 +16,7 @@ module.exports = {
     'indent': [0],
     'linebreak-style': 0,
     'semi': ['error', 'never'],
+    'max-len': ['error', { 'code': 120 }],
   },
   parserOptions: {
     parser: 'babel-eslint',

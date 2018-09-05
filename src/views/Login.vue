@@ -17,6 +17,7 @@
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
+            <el-button type="primary" @click="register">注册</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -69,6 +70,7 @@ export default {
           if (code === 'OK') {
             return this.$message({
               message: msg,
+              type: 'success',
               onClose() {
                 self.$router.push('/')
               },
@@ -78,6 +80,9 @@ export default {
         }
         return false
       })
+    },
+    register() {
+      this.$router.push('/register')
     },
   },
 }
