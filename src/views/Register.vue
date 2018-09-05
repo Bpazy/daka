@@ -1,5 +1,5 @@
 <template>
-    <el-form :model="registerForm" label-width="90px" :rules="rules" ref="registerForm">
+    <el-form :model="registerForm" label-width="90px" :rules="rules" ref="registerForm" style="display: inline-block;">
         <el-form-item label="用户名" prop="username">
             <el-input v-model="registerForm.username" style="width: 200px;"></el-input>
         </el-form-item>

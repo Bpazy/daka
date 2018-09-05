@@ -1,5 +1,5 @@
 <template>
-    <el-form :model="loginForm" label-width="90px" :rules="rules" ref="loginForm">
+    <el-form :model="loginForm" label-width="90px" :rules="rules" ref="loginForm" style="display: inline-block;">
         <el-form-item label="用户名" prop="username">
             <el-input
               v-model="loginForm.username"
